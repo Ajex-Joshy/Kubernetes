@@ -1,0 +1,33 @@
+apiVersion: apps/v1 # apps -> API group, v1 -> API version
+kind: ReplicaSet
+
+metadata:
+  name: nginx-rs
+  labels:
+    app: nginx
+    tier: frontend
+
+spec:
+  replicas: 3
+
+  # selector tells the ReplicaSet which Pods it should manage
+  selector:
+    # matchLabels is the simplest selector type
+    # It selects Pods whose labels exactly match the given key-value pairs
+    matchLabels:
+      # This means: select Pods where label `app=nginx`
+      # The Pod template below has the same label, so those Pods will be managed by this ReplicaSet
+      app: nginx
+
+  template:
+    metadata:
+      labels:
+        app: nginx
+        tier: frontend
+
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx
+          ports:
+            - containerPort: 80

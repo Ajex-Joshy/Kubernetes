@@ -1,0 +1,17 @@
+apiVersion:
+kind:
+metadata:
+  name:
+  labels:
+spec:
+  replicas:
+
+  selector:
+    matchLabels:
+
+  template:
+    # here we does not want to give apiVersion and kind because replicaset already knows teh template is for pods
+    metadata:
+      # name: nginx-pod, we will not give name in a template because ReplicaSet automatically generates pod names, because we need to create multiple pods from a single template
+      label:
+    spec:

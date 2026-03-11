@@ -1,5 +1,5 @@
 # This is auto generated using this command
-# kubectl run nginx --image=nginx --dry-run=client -o yaml > configs/ngnix_pod_2.yaml
+# kubectl run nginx --image=nginx --dry-run=client -o yaml > configs/pods/ngnix_pod_2.yaml
 
 # --dry-run=client :- Simulates the command locally using kubectl without sending the request to the Kubernetes API server. Mainly used to generate YAML manifests.
 # --dry-run=server :- Sends the request to the Kubernetes API server for validation, but the resource is not actually created or stored in etcd.
