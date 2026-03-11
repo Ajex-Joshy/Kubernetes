@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+    env: demo
+    type: frontend
+spec:
+  containers: # defines containers that run inside the pod, a pod can have multiple container so its a list (-)
+    - name: nginx-container
+      image: nginx
+      ports: # container can expose multiple ports, so its a list
+        - containerPort: 80
+
+# kubectl apply -f nginx-pod.yaml
+# -f means --filename
+
+# 1. API server receives the request
+# 2. Scheduler assigns the pod to a node
+# 3. Worker node pulls the nginx image
+# 4. Container runtime starts the container
+# 5. Pod status becomes running

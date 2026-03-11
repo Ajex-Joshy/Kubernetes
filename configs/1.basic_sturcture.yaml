@@ -1,0 +1,6 @@
+# basic structure of  resource definition in k8s
+
+apiVersion: # Which API version to use to interpret this resource.
+kind: # This defines what type of resource you are creating.(eg:- kind: Pod)
+metadata: # Contains information that identifies this resource eg:- name, labels
+spec: # It describes the desired state of the resource

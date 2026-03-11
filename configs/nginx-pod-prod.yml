@@ -1,0 +1,70 @@
+# apiVersion specifies which Kubernetes API version is used for this resource
+apiVersion: v1
+
+# kind defines the type of Kubernetes resource being created
+kind: Pod
+
+# metadata contains identifying information about the object
+metadata:
+  # name is the unique name of the pod within the namespace
+  name: nginx-pod
+
+  # labels are key-value pairs used to organize and select resources
+  labels:
+    # app label identifies the application
+    app: nginx
+    # tier label indicates the application layer
+    tier: frontend
+
+# spec defines the desired state of the pod
+spec:
+  # containers lists all containers that will run inside the pod
+  containers:
+    # first container definition
+    - name: nginx # name of the container inside the pod
+      image: nginx:1.25 # container image pulled from container registry
+      imagePullPolicy: IfNotPresent # pull image only if it is not already on the node
+
+      # ports define which ports the container exposes
+      ports:
+        - containerPort: 80 # nginx listens on port 80 inside the container
+
+      # resources define CPU and memory allocation rules
+      resources:
+        # requests specify the minimum resources required for scheduling
+        requests:
+          cpu: "100m" # minimum CPU requested (0.1 CPU core)
+          memory: "128Mi" # minimum memory requested
+
+        # limits specify the maximum resources the container can use
+        limits:
+          cpu: "500m" # maximum CPU allowed (0.5 CPU core)
+          memory: "256Mi" # maximum memory allowed
+
+      # livenessProbe checks if the container is still running correctly
+      livenessProbe:
+        httpGet:
+          path: / # HTTP endpoint to check
+          port: 80 # port used for health check
+        initialDelaySeconds: 10 # wait 10 seconds before first check
+        periodSeconds: 10 # perform check every 10 seconds
+
+      # readinessProbe checks if the container is ready to receive traffic
+      readinessProbe:
+        httpGet:
+          path: / # endpoint used to verify readiness
+          port: 80 # port used for readiness check
+        initialDelaySeconds: 5 # wait 5 seconds before first check
+        periodSeconds: 5 # run readiness check every 5 seconds
+
+  # dnsPolicy defines how DNS resolution works for the pod
+  dnsPolicy: ClusterFirst # pod uses cluster DNS service first
+
+  # restartPolicy defines when containers should restart
+  restartPolicy: Always # always restart container if it stops
+
+
+  # 1000m = 1 CPU core
+  # if a node has 4 CPUs then 4000m total CPU
+  # Mi = Mebibyte
+  # 128Mi = 128 MB
