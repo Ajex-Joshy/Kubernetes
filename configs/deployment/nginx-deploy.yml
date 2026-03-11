@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+    tier: frontend
+
+spec:
+  replicas: 3
+
+  # strategy defines how Kubernetes updates Pods when the Deployment changes
+  strategy:
+    # RollingUpdate is the default and safest strategy for production
+    # It replaces old Pods gradually with new ones to avoid downtime
+    type: RollingUpdate
+
+    # rollingUpdate contains the configuration that controls the update behavior
+    rollingUpdate:
+      # maxUnavailable means the maximum number of Pods that can be unavailable
+      # during the update process. Here at most 1 Pod can be down at a time.
+      maxUnavailable: 1
+
+      # maxSurge defines how many extra Pods can be created above the desired
+      # replica count during an update. This helps bring new Pods up before
+      # terminating old ones.
+      maxSurge: 1
+
+  selector:
+    matchLabels:
+      app: nginx
+
+  template:
+    metadata:
+      labels:
+        app: nginx
+        tier: frontend
+
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx:1.25.3
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 80
+
+          # securityContext defines security settings for the container
+          # It helps enforce best practices and reduces security risks
+          securityContext:
+            # runAsNonRoot ensures the container does NOT run as the root user
+            # Running containers as root can be dangerous in production environments
+            #runAsNonRoot: true
+
+            # runAsUser specifies the UID (user ID) that the container should run as
+            # 101 is the default nginx user inside the nginx image
+            #krunAsUser: 101
+
+            # allowPrivilegeEscalation prevents the process from gaining more
+            # privileges than its parent process (e.g., via sudo or setuid binaries)
+            # Setting this to false improves container security
+            allowPrivilegeEscalation: false
+
+      restartPolicy: Always
