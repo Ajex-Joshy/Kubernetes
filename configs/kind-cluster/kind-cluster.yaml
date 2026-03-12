@@ -1,0 +1,28 @@
+# Defines that we are creating a Kubernetes cluster using Kind
+kind: Cluster
+
+# API version of the Kind configuration schema
+apiVersion: kind.x-k8s.io/v1alpha4
+
+# List of nodes that will form the cluster
+nodes:
+  # This node will act as the Kubernetes control-plane (master node)
+  - role: control-plane
+
+    # Maps ports between the host machine and the Kind node container
+    # This allows external traffic from your laptop to reach Kubernetes services
+    extraPortMappings:
+      # Port inside the Kind node container
+      - containerPort: 30007
+
+        # Port on your host machine (Mac). Requests to localhost:30007 reach the node
+        hostPort: 30007
+
+        # Network protocol used for the port mapping
+        protocol: TCP
+
+  # First worker node where application pods can run
+  - role: worker
+
+  # Second worker node where application pods can run
+  - role: worker
